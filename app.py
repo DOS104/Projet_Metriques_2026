@@ -56,6 +56,10 @@ def api_orsay():
     ]
     return jsonify(result)
 
+@app.route("/atelier")
+def atelier():
+    return render_template("atelier.html")
+
 # Ne rien mettre après ce commentaire
     
 if __name__ == "__main__":
