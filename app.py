@@ -34,6 +34,28 @@ def api_paris():
 def mongraphique():
     return render_template("graphique.html")
 
+@app.get("/orsay-meteo")
+def api_orsay():
+    url = "https://api.open-meteo.com/v1/forecast?latitude=48.6961&longitude=2.1878&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=Europe/Paris"
+    response = requests.get(url)
+    data = response.json()
+
+    dates = data.get("daily", {}).get("time", [])
+    t_max = data.get("daily", {}).get("temperature_2m_max", [])
+    t_min = data.get("daily", {}).get("temperature_2m_min", [])
+    precip = data.get("daily", {}).get("precipitation_sum", [])
+
+    result = [
+        {
+            "date": dates[i],
+            "temp_max": t_max[i],
+            "temp_min": t_min[i],
+            "precipitation": precip[i]
+        }
+        for i in range(len(dates))
+    ]
+    return jsonify(result)
+
 # Ne rien mettre après ce commentaire
     
 if __name__ == "__main__":
